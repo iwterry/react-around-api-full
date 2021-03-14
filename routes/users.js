@@ -5,13 +5,13 @@ const path = require('path');
 const absPathToUserData = path.join(__dirname, '..', 'data', 'users.json');
 
 userRouter.get('/users', (req, res) => {
-  fs.readFile(absPathToUserData, { encoding: 'utf8' }, (err, users) => {
+  fs.readFile(absPathToUserData, { encoding: 'utf8' }, (err, usersJsonString) => {
     if (err) {
       console.log(err);
-      res.status(500).send({ message: 'An error has occurred on our end' });
+      res.status(500).json({ message: 'An error has occurred on our end' });
       return;
     }
-    res.send(users);
+    res.json(JSON.parse(usersJsonString));
   });
 });
 
@@ -19,7 +19,7 @@ userRouter.get('/users/:id', (req, res) => {
   fs.readFile(absPathToUserData, { encoding: 'utf8' }, (err, usersJsonString) => {
     if (err) {
       console.log(err);
-      res.status(500).send({ message: 'An error has occurred on our end' });
+      res.status(500).json({ message: 'An error has occurred on our end' });
       return;
     }
 
@@ -28,11 +28,11 @@ userRouter.get('/users/:id', (req, res) => {
     const requestedUser = users.find(({ _id: someUserId }) => someUserId === requestedUserId);
 
     if (requestedUser == null) {
-      res.status(404).send({ message: 'User ID not found' });
+      res.status(404).json({ message: 'User ID not found' });
       return;
     }
 
-    res.send(requestedUser);
+    res.json(requestedUser);
   });
 });
 

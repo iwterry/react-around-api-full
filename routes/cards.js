@@ -5,13 +5,13 @@ const path = require('path');
 const absPathToUserData = path.join(__dirname, '..', 'data', 'cards.json');
 
 cardRouter.get('/cards', (req, res) => {
-  fs.readFile(absPathToUserData, { encoding: 'utf8' }, (err, cards) => {
+  fs.readFile(absPathToUserData, { encoding: 'utf8' }, (err, cardsJsonString) => {
     if (err) {
       console.log(err);
-      res.status(500).send({ message: 'An error has occurred on our end' });
+      res.status(500).json({ message: 'An error has occurred on our end' });
       return;
     }
-    res.send(cards);
+    res.json(JSON.parse(cardsJsonString));
   });
 });
 
