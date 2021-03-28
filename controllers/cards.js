@@ -1,11 +1,7 @@
-const mongoose = require('mongoose');
-
 const Card = require('../models/card');
 const User = require('../models/user');
 
-const { getCardInfoDisplayedToClient } = require('../helpers/helpers');
-const GeneralServerHttpError = require('../errors/GeneralServerHttpError');
-const BadRequestHttpError = require('../errors/BadRequestHttpError');
+const { getCardInfoDisplayedToClient, convertErrorToHttpError } = require('../helpers/helpers');
 const NoRightToAccessHttpError = require('../errors/NoRightToAccessHttpError');
 const NotFoundHttpError = require('../errors/NotFoundHttpError');
 
@@ -30,7 +26,7 @@ function updateCardLikes(req, res, next, { isLike, cardId }) {
       }
 
       res.json(getCardInfoDisplayedToClient(updatedCard));
-    }).catch((err) => next(new GeneralServerHttpError(err)));
+    }).catch((err) => convertErrorToHttpError(err, next));
 }
 
 module.exports.getCards = (req, res, next) => {
@@ -38,7 +34,7 @@ module.exports.getCards = (req, res, next) => {
     .find({})
     .populate(fieldsToPopulate)
     .then((cards) => res.json(cards.map(getCardInfoDisplayedToClient)))
-    .catch((err) => next(new GeneralServerHttpError(err)));
+    .catch((err) => convertErrorToHttpError(err, next));
 };
 
 module.exports.createCard = (req, res, next) => {
@@ -57,13 +53,7 @@ module.exports.createCard = (req, res, next) => {
         newCard.owner = owner;
         res.json(getCardInfoDisplayedToClient(newCard));
       }))
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        next(new BadRequestHttpError(err.message));
-        return;
-      }
-      next(new GeneralServerHttpError(err));
-    });
+    .catch((err) => convertErrorToHttpError(err, next));
 };
 
 module.exports.deleteCard = (req, res, next) => {
@@ -85,7 +75,7 @@ module.exports.deleteCard = (req, res, next) => {
       return Card
         .deleteOne({ _id: card._id })
         .then(() => res.status(204).end());
-    }).catch((err) => next(new GeneralServerHttpError(err)));
+    }).catch((err) => convertErrorToHttpError(err, next));
 };
 
 module.exports.likeCard = (req, res, next) => {

@@ -1,9 +1,5 @@
-const mongoose = require('mongoose');
-
 const User = require('../models/user');
-const { getUserInfoDisplayedToClient } = require('../helpers/helpers');
-const GeneralServerHttpError = require('../errors/GeneralServerHttpError');
-const BadRequestHttpError = require('../errors/BadRequestHttpError');
+const { getUserInfoDisplayedToClient, convertErrorToHttpError } = require('../helpers/helpers');
 const NotFoundHttpError = require('../errors/NotFoundHttpError');
 
 const NOT_FOUND_ERROR_MSG = 'User ID not found';
@@ -18,21 +14,14 @@ function updateUserInfo(req, res, next, updatedData) {
       }
 
       res.json(getUserInfoDisplayedToClient(updatedUser));
-    }).catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        next(new BadRequestHttpError(err.message));
-        return;
-      }
-
-      next(new GeneralServerHttpError(err));
-    });
+    }).catch((err) => convertErrorToHttpError(err, next));
 }
 
 module.exports.getUsers = (req, res, next) => {
   User
     .find({})
     .then((users) => res.json(users.map(getUserInfoDisplayedToClient)))
-    .catch((err) => next(new GeneralServerHttpError(err)));
+    .catch((err) => convertErrorToHttpError(err, next));
 };
 
 module.exports.getUserById = (req, res, next) => {
@@ -47,7 +36,7 @@ module.exports.getUserById = (req, res, next) => {
       }
 
       res.json(getUserInfoDisplayedToClient(user));
-    }).catch((err) => next(new GeneralServerHttpError(err)));
+    }).catch((err) => convertErrorToHttpError(err, next));
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -56,14 +45,7 @@ module.exports.createUser = (req, res, next) => {
   User
     .create({ name, about, avatar })
     .then((createdUser) => res.json(getUserInfoDisplayedToClient(createdUser)))
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        next(new BadRequestHttpError(err.message));
-        return;
-      }
-
-      next(new GeneralServerHttpError(err));
-    });
+    .catch((err) => convertErrorToHttpError(err, next));
 };
 
 module.exports.updateUserProfile = (req, res, next) => {

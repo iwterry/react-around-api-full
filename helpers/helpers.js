@@ -1,3 +1,7 @@
+const mongoose = require('mongoose');
+const BadRequestHttpError = require('../errors/BadRequestHttpError');
+const GeneralServerHttpError = require('../errors/GeneralServerHttpError');
+
 /*
 This function is used to control what data a client can see from the database.
 I think it is a good idea in order separate what is in the database versus what
@@ -28,8 +32,23 @@ function logError(err) {
   console.log(`Error: ${err}`);
 }
 
+function convertErrorToHttpError(err, next) {
+  const isValidationOrCastError = (
+    err instanceof mongoose.Error.CastError
+    || err instanceof mongoose.Error.ValidationError
+  );
+
+  if (isValidationOrCastError) {
+    next(new BadRequestHttpError(err.message));
+    return;
+  }
+
+  next(new GeneralServerHttpError(err));
+}
+
 module.exports = {
   getUserInfoDisplayedToClient,
   getCardInfoDisplayedToClient,
   logError,
+  convertErrorToHttpError,
 };
