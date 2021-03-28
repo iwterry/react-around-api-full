@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { regExForLink } = require('../helpers/constants');
+const { doesLinkHaveValidFormat } = require('../helpers/helpers');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -11,7 +11,9 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
-    match: regExForLink,
+    validate: {
+      validator: doesLinkHaveValidFormat,
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

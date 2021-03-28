@@ -46,9 +46,28 @@ function convertErrorToHttpError(err, next) {
   next(new GeneralServerHttpError(err));
 }
 
+function doesLinkHaveValidFormat(possibleLink) {
+  // from protocol to top-level domain
+  // eslint-disable-next-line no-useless-escape
+  const firstPartRegEx = /^https?:\/{2}(www\.)?[a-z0-9][a-z0-9\-]*[a-z0-9]\.[a-z][a-z0-9\-]*[a-z0-9]/;
+  // everything after and including the / (forward slash) that follows the top-level domain
+  // eslint-disable-next-line no-useless-escape
+  const lastPartRegEx = /^\/[\w\.\~\:\/\\\?\%\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\-]*#?$/;
+
+  const matchForFirstPart = possibleLink.match(firstPartRegEx);
+
+  if (matchForFirstPart == null) {
+    return false;
+  }
+
+  const lastPartOfPossibleLink = possibleLink.slice(matchForFirstPart[0].length);
+  return lastPartOfPossibleLink === '' || lastPartRegEx.test(lastPartOfPossibleLink);
+}
+
 module.exports = {
   getUserInfoDisplayedToClient,
   getCardInfoDisplayedToClient,
   logError,
   convertErrorToHttpError,
+  doesLinkHaveValidFormat,
 };

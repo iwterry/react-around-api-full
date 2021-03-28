@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { regExForLink } = require('../helpers/constants');
+const { doesLinkHaveValidFormat } = require('../helpers/helpers');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -17,7 +17,9 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: true,
-    match: regExForLink,
+    validate: {
+      validator: doesLinkHaveValidFormat,
+    },
   },
 });
 
