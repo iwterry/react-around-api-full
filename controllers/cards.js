@@ -90,12 +90,12 @@ module.exports.deleteCard = (req, res, next) => {
 
 module.exports.likeCard = (req, res, next) => {
   const { id: cardId } = req.params;
-  const isLiked = true;
-  updateCardLikes(req, res, next, { isLiked, cardId });
+  const isLike = true;
+  updateCardLikes(req, res, next, { isLike, cardId });
 };
 
 module.exports.unlikeCard = (req, res, next) => {
   const { id: cardId } = req.params;
-  const isLiked = false;
-  updateCardLikes(req, res, next, { isLiked, cardId });
+  const isLike = false;
+  updateCardLikes(req, res, next, { isLike, cardId });
 };
