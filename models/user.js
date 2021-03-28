@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { regExForLink } = require('../helpers/constants');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -16,8 +17,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: true,
-    // eslint-disable-next-line no-useless-escape
-    match: /^https?:\/{2}(www\.)?[\w\.\~\:\/\\\?\%\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\-]+\/?#?$/,
+    match: regExForLink,
   },
 });
 
