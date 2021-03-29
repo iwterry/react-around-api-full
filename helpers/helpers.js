@@ -52,7 +52,7 @@ function doesLinkHaveValidFormat(possibleLink) {
   const firstPartRegEx = /^https?:\/{2}(www\.)?[a-z0-9][a-z0-9\-]*[a-z0-9]\.[a-z][a-z0-9\-]*[a-z0-9]/i;
   // everything after and including the / (forward slash) that follows the top-level domain
   // eslint-disable-next-line no-useless-escape
-  const lastPartRegEx = /^\/[\w\.\~\:\/\\\?\%\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\-]*#?$/i;
+  const lastPartRegEx = /^\/[\w\.\~\:\/\\\?\%\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]*#?$/i;
 
   const matchForFirstPart = possibleLink.match(firstPartRegEx);
 
