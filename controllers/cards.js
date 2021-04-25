@@ -1,7 +1,7 @@
 const Card = require('../models/card');
 const User = require('../models/user');
 
-const { getCardInfoDisplayedToClient, convertErrorToHttpError } = require('../helpers/helpers');
+const { getCardInfoDisplayedToClient } = require('../helpers/helpers');
 const NoRightToAccessHttpError = require('../errors/NoRightToAccessHttpError');
 const NotFoundHttpError = require('../errors/NotFoundHttpError');
 
@@ -21,12 +21,11 @@ function updateCardLikes(req, res, next, { isLike, cardId }) {
     }).populate(fieldsToPopulate)
     .then((updatedCard) => {
       if (updatedCard == null) {
-        next(new NotFoundHttpError(NOT_FOUND_ERROR_MSG));
-        return;
+        throw new NotFoundHttpError(NOT_FOUND_ERROR_MSG);
       }
 
       res.json(getCardInfoDisplayedToClient(updatedCard));
-    }).catch((err) => next(convertErrorToHttpError(err)));
+    }).catch(next);
 }
 
 module.exports.getCards = (req, res, next) => {
@@ -34,7 +33,7 @@ module.exports.getCards = (req, res, next) => {
     .find({})
     .populate(fieldsToPopulate)
     .then((cards) => res.json(cards.map(getCardInfoDisplayedToClient)))
-    .catch((err) => next(convertErrorToHttpError(err)));
+    .catch(next);
 };
 
 module.exports.createCard = (req, res, next) => {
@@ -53,7 +52,7 @@ module.exports.createCard = (req, res, next) => {
         newCard.owner = owner;
         res.json(getCardInfoDisplayedToClient(newCard));
       }))
-    .catch((err) => next(convertErrorToHttpError(err)));
+    .catch(next);
 };
 
 module.exports.deleteCard = (req, res, next) => {
@@ -62,20 +61,18 @@ module.exports.deleteCard = (req, res, next) => {
   Card
     .findById(id)
     .then((card) => {
-      if (card == null) {
-        next(new NotFoundHttpError(NOT_FOUND_ERROR_MSG));
-        return Promise.resolve();
+      if (!card) {
+        throw new NotFoundHttpError(NOT_FOUND_ERROR_MSG);
       }
 
       if (String(card.owner) !== req.user._id) {
-        next(new NoRightToAccessHttpError('Do not have permission to delete this card'));
-        return Promise.resolve();
+        throw new NoRightToAccessHttpError('Do not have permission to delete this card');
       }
 
       return Card
         .deleteOne({ _id: card._id })
         .then(() => res.status(204).end());
-    }).catch((err) => next(convertErrorToHttpError(err)));
+    }).catch(next);
 };
 
 module.exports.likeCard = (req, res, next) => {

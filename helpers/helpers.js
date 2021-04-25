@@ -31,7 +31,7 @@ function getCardInfoDisplayedToClient(cardFromDatabase) {
 }
 
 function logError(err) {
-  console.log(`Error: ${err.message}`);
+  console.log(`Error: ${err.stack}`);
 }
 
 function convertErrorToHttpError(err) {

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/user');
-const { getUserInfoDisplayedToClient, convertErrorToHttpError } = require('../helpers/helpers');
+const { getUserInfoDisplayedToClient } = require('../helpers/helpers');
 const NotFoundHttpError = require('../errors/NotFoundHttpError');
 const BadRequestHttpError = require('../errors/BadRequestHttpError');
 
@@ -13,12 +13,11 @@ function updateUserInfo(req, res, next, updatedData) {
     .findByIdAndUpdate(req.user._id, updatedData, { new: true, runValidators: true })
     .then((updatedUser) => {
       if (updatedUser == null) {
-        next(new NotFoundHttpError(NOT_FOUND_ERROR_MSG));
-        return;
+        throw new NotFoundHttpError(NOT_FOUND_ERROR_MSG);
       }
 
       res.json(getUserInfoDisplayedToClient(updatedUser));
-    }).catch((err) => next(convertErrorToHttpError(err)));
+    }).catch(next);
 }
 
 function getUserById(id, res, next) {
@@ -26,19 +25,18 @@ function getUserById(id, res, next) {
     .findById(id)
     .then((user) => {
       if (user == null) {
-        next(new NotFoundHttpError(NOT_FOUND_ERROR_MSG));
-        return;
+        throw new NotFoundHttpError(NOT_FOUND_ERROR_MSG);
       }
 
       res.json(getUserInfoDisplayedToClient(user));
-    }).catch((err) => next(convertErrorToHttpError(err)));
+    }).catch(next);
 }
 
 module.exports.getUsers = (req, res, next) => {
   User
     .find({})
     .then((users) => res.json(users.map(getUserInfoDisplayedToClient)))
-    .catch((err) => next(convertErrorToHttpError(err)));
+    .catch(next);
 };
 
 module.exports.getUserById = (req, res, next) => {
@@ -72,8 +70,7 @@ module.exports.createUser = (req, res, next) => {
   } = req.body;
 
   if (!email || !password) {
-    next(new BadRequestHttpError('email or password was not provided'));
-    return;
+    throw new BadRequestHttpError('email or password was not provided');
   }
 
   bcrypt
@@ -82,7 +79,7 @@ module.exports.createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then((createdUser) => res.json(getUserInfoDisplayedToClient(createdUser)))
-    .catch((err) => next(convertErrorToHttpError(err)));
+    .catch(next);
 };
 
 module.exports.login = (req, res, next) => {
@@ -110,7 +107,7 @@ module.exports.login = (req, res, next) => {
         })
         .end();
     })
-    .catch((err) => next(convertErrorToHttpError(err)));
+    .catch(next);
 };
 
 module.exports.getCurrentUser = (req, res, next) => {

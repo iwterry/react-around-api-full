@@ -7,13 +7,10 @@ const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 
 const authMiddleware = require('./middleware/auth');
+const { login, createUser } = require('./controllers/users');
 
 const NotFoundHttpError = require('./errors/NotFoundHttpError');
-const HttpError = require('./errors/HttpError');
-const GeneralServerHttpError = require('./errors/GeneralServerHttpError');
-
-const { logError } = require('./helpers/helpers');
-const { login, createUser } = require('./controllers/users');
+const { logError, convertErrorToHttpError } = require('./helpers/helpers');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -43,17 +40,19 @@ app.use((req, res, next) => {
   next(new NotFoundHttpError());
 });
 
+/* the parameter "next" will not be used, but is needed
+as this is error middleware and it requires four parameters */
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  if (!(err instanceof HttpError)) {
-    logError(err);
-    next(err);
-    return;
+  const httpError = convertErrorToHttpError(err);
+
+  if (httpError.httpStatusCode === 500) {
+    logError(httpError.origError);
+  } else {
+    logError(httpError);
   }
 
-  if (err instanceof GeneralServerHttpError) logError(err.otherError);
-  else logError(err);
-
-  res.status(err.httpStatusCode).json({ message: err.message });
+  res.status(httpError.httpStatusCode).json({ message: httpError.message });
 });
 
 app.listen(PORT, () => {
