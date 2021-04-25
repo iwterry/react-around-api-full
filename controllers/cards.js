@@ -26,7 +26,7 @@ function updateCardLikes(req, res, next, { isLike, cardId }) {
       }
 
       res.json(getCardInfoDisplayedToClient(updatedCard));
-    }).catch((err) => convertErrorToHttpError(err, next));
+    }).catch((err) => next(convertErrorToHttpError(err)));
 }
 
 module.exports.getCards = (req, res, next) => {
@@ -34,7 +34,7 @@ module.exports.getCards = (req, res, next) => {
     .find({})
     .populate(fieldsToPopulate)
     .then((cards) => res.json(cards.map(getCardInfoDisplayedToClient)))
-    .catch((err) => convertErrorToHttpError(err, next));
+    .catch((err) => next(convertErrorToHttpError(err)));
 };
 
 module.exports.createCard = (req, res, next) => {
@@ -53,7 +53,7 @@ module.exports.createCard = (req, res, next) => {
         newCard.owner = owner;
         res.json(getCardInfoDisplayedToClient(newCard));
       }))
-    .catch((err) => convertErrorToHttpError(err, next));
+    .catch((err) => next(convertErrorToHttpError(err)));
 };
 
 module.exports.deleteCard = (req, res, next) => {
@@ -75,7 +75,7 @@ module.exports.deleteCard = (req, res, next) => {
       return Card
         .deleteOne({ _id: card._id })
         .then(() => res.status(204).end());
-    }).catch((err) => convertErrorToHttpError(err, next));
+    }).catch((err) => next(convertErrorToHttpError(err)));
 };
 
 module.exports.likeCard = (req, res, next) => {

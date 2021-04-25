@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const BadRequestHttpError = require('../errors/BadRequestHttpError');
 const GeneralServerHttpError = require('../errors/GeneralServerHttpError');
+const HttpError = require('../errors/HttpError');
 
 /*
 This function is used to control what data a client can see from the database.
@@ -12,6 +13,7 @@ function getUserInfoDisplayedToClient(userFromDatabase) {
   return {
     _id: userFromDatabase._id,
     name: userFromDatabase.name,
+    email: userFromDatabase.email,
     about: userFromDatabase.about,
     avatar: userFromDatabase.avatar,
   };
@@ -29,21 +31,24 @@ function getCardInfoDisplayedToClient(cardFromDatabase) {
 }
 
 function logError(err) {
-  console.log(`Error: ${err}`);
+  console.log(`Error: ${err.message}`);
 }
 
-function convertErrorToHttpError(err, next) {
+function convertErrorToHttpError(err) {
+  if (err instanceof HttpError) {
+    return err;
+  }
+
   const isValidationOrCastError = (
     err instanceof mongoose.Error.CastError
     || err instanceof mongoose.Error.ValidationError
   );
 
   if (isValidationOrCastError) {
-    next(new BadRequestHttpError(err.message));
-    return;
+    return new BadRequestHttpError(err.message);
   }
 
-  next(new GeneralServerHttpError(err));
+  return new GeneralServerHttpError(err);
 }
 
 function doesLinkHaveValidFormat(possibleLink) {

@@ -1,14 +1,19 @@
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 
+const authMiddleware = require('./middleware/auth');
+
 const NotFoundHttpError = require('./errors/NotFoundHttpError');
 const HttpError = require('./errors/HttpError');
 const GeneralServerHttpError = require('./errors/GeneralServerHttpError');
+
 const { logError } = require('./helpers/helpers');
+const { login, createUser } = require('./controllers/users');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -25,14 +30,12 @@ mongoose.connection.on('error', logError);
 
 app.use(helmet());
 app.use(express.json());
+app.use(cookieParser());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '605eee0c4d206e2c4c99d052',
-  };
+app.post('/signin', login);
+app.post('/signup', createUser);
 
-  next();
-});
+app.use(authMiddleware);
 
 app.use('/', userRouter);
 app.use('/', cardRouter);
