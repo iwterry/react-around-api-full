@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iwterry/around-express.git"
+    "url": "git+https://github.com/iwterry/react-around-api-full.git"
   },
   "author": "Isaac Terry",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/iwterry/around-express/issues"
+    "url": "https://github.com/iwterry/react-around-api-full/issues"
   },
-  "homepage": "https://github.com/iwterry/around-express#readme",
+  "homepage": "https://github.com/iwterry/react-around-api-full#readme",
   "devDependencies": {
     "eslint": "^7.22.0",
     "eslint-config-airbnb-base": "^14.2.1",

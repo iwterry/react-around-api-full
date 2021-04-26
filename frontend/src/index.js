@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter basename="/iwterry/react-around-auth">
+    <BrowserRouter basename="/iwterry/react-around-api-full">
       <App />
     </BrowserRouter>
   </React.StrictMode>,
