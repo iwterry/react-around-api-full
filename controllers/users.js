@@ -59,7 +59,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   const newData = {};
 
-  if (avatar != null) newData.avatar = avatar;
+  newData.avatar = avatar;
 
   updateUserInfo(req, res, next, newData);
 };
@@ -69,15 +69,19 @@ module.exports.createUser = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  if (!email || !password) {
-    throw new BadRequestHttpError('email or password was not provided');
-  }
-
   bcrypt
     .hash(password, 10)
-    .then((hash) => User.create({
-      name, about, avatar, email, password: hash,
-    }))
+    .then((hash) => User
+      .create({
+        name, about, avatar, email, password: hash,
+      })
+      .catch((err) => {
+        // assumption: detection for when duplicate email occurs
+        if (err.name === 'MongoError' && err.code === 11000) {
+          throw new BadRequestHttpError();
+        }
+        throw err;
+      }))
     .then((createdUser) => res.json(getUserInfoDisplayedToClient(createdUser)))
     .catch(next);
 };
@@ -85,10 +89,6 @@ module.exports.createUser = (req, res, next) => {
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   const sevenDaysInMilliSeconds = 1000 * 60 * 60 * 24 * 7;
-
-  if (!email || !password) {
-    throw new BadRequestHttpError('email or password was not provided');
-  }
 
   User
     .findUserByCredentials(email, password)

@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const { errors, celebrate, Joi } = require('celebrate');
 
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -29,8 +30,21 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string().uri({ scheme: ['http', 'https'] }),
+  }),
+}), createUser);
 
 app.use(authMiddleware);
 
@@ -39,6 +53,8 @@ app.use('/', cardRouter);
 app.use((req, res, next) => {
   next(new NotFoundHttpError());
 });
+
+app.use(errors());
 
 /* the parameter "next" will not be used, but is needed
 as this is error middleware and it requires four parameters */
