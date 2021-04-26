@@ -1,0 +1,8 @@
+.header__hamburger-menu {
+  display: none;
+}
+
+.header__hamburger-menu:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}

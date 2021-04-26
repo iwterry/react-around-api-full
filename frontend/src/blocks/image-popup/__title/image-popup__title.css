@@ -1,0 +1,5 @@
+.image-popup__title {
+  color: #fff;
+  font-size: 12px;
+  line-height: calc(15 / 12); /* 15px */
+}

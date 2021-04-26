@@ -1,0 +1,6 @@
+.location__num-likes {
+  margin: 0;
+  
+  font-size: 13px;
+  line-height: calc(16 / 13);
+}

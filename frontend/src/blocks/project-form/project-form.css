@@ -1,0 +1,52 @@
+@import url(./__title/project-form__title.css);
+@import url(./__title/_type/project-form__title_type_location-create.css);
+@import url(./__title/_type/project-form__title_type_profile-edit.css);
+@import url(./__title/_type/project-form__title_type_confirmation-prompt.css);
+@import url(./__title/_type/project-form__title_type_profile-img-change.css);
+@import url(./__title/_type/project-form__title_type_user-auth.css);
+@import url(./__field-wrapper/project-form__field-wrapper.css);
+@import url(./__field-wrapper/_form/project-form__field-wrapper_form_profile-edit.css);
+@import url(./__field-wrapper/_form/project-form__field-wrapper_form_location-create.css);
+@import url(./__field-wrapper/_form/project-form__field-wrapper_form_profile-img-change.css);
+@import url(./__field-wrapper/_form/project-form__field-wrapper_form_user-auth.css);
+@import url(./__input/project-form__input.css);
+@import url(./__input/_type/project-form__input_type_profile-edit-field.css);
+@import url(./__input/_type/project-form__input_type_location-create-field.css);
+@import url(./__input/_type/project-form__input_type_profile-img-change-field.css);
+@import url(./__input/_type/project-form__input_type_user-auth-field.css);
+@import url(./__input/_type/project-form__input_type_error.css);
+@import url(./__input-error/project-form__input-error.css);
+@import url(./__input-error/_field/project-form__input-error_field_profile-name.css);
+@import url(./__input-error/_field/project-form__input-error_field_profile-description.css);
+@import url(./__input-error/_field/project-form__input-error_field_location-title.css);
+@import url(./__input-error/_field/project-form__input-error_field_location-link.css);
+@import url(./__input-error/_field/project-form__input-error_field_profile-avatar.css);
+@import url(./__input-error/_field/project-form__input-error_field_user-email.css);
+@import url(./__input-error/_field/project-form__input-error_field_user-password.css);
+@import url(./__input-error/_active/project-form__input-error_active.css);
+@import url(./__submit-btn/project-form__submit-btn.css);
+@import url(./__submit-btn/_type/project-form__submit-btn_type_location-create.css);
+@import url(./__submit-btn/_type/project-form__submit-btn_type_profile-edit.css);
+@import url(./__submit-btn/_type/project-form__submit-btn_type_confirmation-prompt.css);
+@import url(./__submit-btn/_type/project-form__submit-btn_type_profile-img-change.css);
+@import url(./__submit-btn/_type/project-form__submit-btn_type_user-auth.css);
+@import url(./__submit-btn/_disabled/project-form__submit-btn_disabled.css);
+
+.project-form {
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background-color: #fff;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);  
+}
+
+@media screen and (min-width: 1024px) {
+  .project-form {
+    width: 430px;
+    padding-top: 34px;
+    padding-bottom: 36.51px;
+  }
+}

@@ -1,0 +1,21 @@
+.location__like-btn {
+  width: 20.76px;
+  height: 18.13px;
+  padding: 0;
+  border: none;
+
+  background-image: url(../../../images/location-like-icon.svg);
+  background-size: cover;
+  background-position: center;
+  background-color: inherit;
+}
+
+.location__like-btn:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.location__like-btn:focus {
+  outline: 1px solid #2f80ed;
+  /* looks as if it appears in project demonstration */
+}

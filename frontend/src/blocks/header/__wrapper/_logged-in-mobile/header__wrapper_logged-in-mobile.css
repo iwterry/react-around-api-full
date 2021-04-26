@@ -1,0 +1,8 @@
+@media screen and (max-width: 600px) {
+  .header__wrapper_logged-in-mobile {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid rgba(84, 84, 84, 0.7);
+  }
+}

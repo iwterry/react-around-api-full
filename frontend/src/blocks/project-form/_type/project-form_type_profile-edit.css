@@ -1,0 +1,6 @@
+@media screen and (max-width: 1023px) {
+  .project-form_type_profile-edit {
+    width: 282px;
+    padding: 25px 0;
+  }
+}

@@ -1,0 +1,11 @@
+@import url(./__collection/locations__collection.css);
+
+.locations {
+  padding-top: 36px;
+}
+
+@media screen and (min-width: 1024px) {
+  .locations {
+    padding-top: 51px;
+  }
+}

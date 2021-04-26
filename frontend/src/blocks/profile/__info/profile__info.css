@@ -1,0 +1,26 @@
+.profile__info {
+  width: 282px;
+  margin-top: 26.25px;
+
+  display: grid;
+  grid-template-columns: 1fr 196px 1fr;
+  gap: 14px 10px;
+  grid-template-areas:
+    ". profile-name profile-edit-btn"
+    "profile-about-me profile-about-me profile-about-me";
+  align-items: baseline;
+}
+
+@media screen and (min-width: 1280px) {
+  .profile__info {
+    width: 415px;
+    margin-top: 0;
+    margin-right: 165px;
+
+    grid-template-columns: 373px 1fr;
+    gap: 16px 18px;
+    grid-template-areas:
+      "profile-name profile-edit-btn"
+      "profile-about-me profile-about-me";
+  }
+}

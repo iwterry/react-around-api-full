@@ -1,0 +1,7 @@
+@media screen and (max-width: 600px) {
+  .nav__item_logged-in-mobile {
+    flex-direction: column;
+    padding: 40px 0;
+    text-align: center;
+  }  
+}

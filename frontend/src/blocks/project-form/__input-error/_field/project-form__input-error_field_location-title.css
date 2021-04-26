@@ -1,0 +1,9 @@
+.project-form__input-error_field_location-title {
+  min-height: 20px;
+}
+
+@media screen and (min-width: 1024px) {
+  .project-form__input-error_field_location-title {
+    min-height: 30px;
+  }
+}

@@ -1,0 +1,21 @@
+.project-form__input-error {
+  /* 
+  Note: Absolute positioning is used in course lessons for the project and it appears
+  as if it is needed based on the project demonstration videos. However, the problem
+  with that approach is that if there is more text, other input elements will get
+  covered by the error message, and the design will hinder usability.
+ */
+
+  margin: 3px 0;
+
+  font-size: 12px;
+  line-height: calc(15 / 12); /* 15px */
+
+  color: #f00;
+  visibility: hidden;
+  opacity: 0;
+
+  transition-property: visibility, opacity;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}

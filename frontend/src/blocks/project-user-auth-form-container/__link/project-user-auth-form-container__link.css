@@ -1,0 +1,8 @@
+.project-user-auth-form-container__link {
+  color: white;
+  text-decoration: none;
+}
+
+.project-user-auth-form-container__link:hover {
+  opacity: 60%;
+}

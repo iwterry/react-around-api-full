@@ -1,0 +1,11 @@
+.project-form__title_type_confirmation-prompt {
+  max-width: 200px;
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 1024px) {
+  .project-form__title_type_confirmation-prompt {
+    max-width: 358px;
+    margin-bottom: 38px;
+  }
+}

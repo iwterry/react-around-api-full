@@ -1,0 +1,19 @@
+@import url(./__wrapper/header__wrapper.css);
+@import url(./__wrapper/_logged-in-mobile/header__wrapper_logged-in-mobile.css);
+@import url(./__vector/header__vector.css);
+@import url(./__hamburger-menu/header__hamburger-menu.css);
+@import url(./__hamburger-menu/_active/header__hamburger-menu_active.css);
+@import url(./__hamburger-menu-line/header__hamburger-menu-line.css);
+@import url(./__nav-close-btn/header__nav-close-btn.css);
+@import url(./__nav-close-btn/_active/header__nav-close-btn_active.css);
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 81%;
+  max-width: 880px;
+  border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+  /* border-color same as #545454 with opacity at 0.7 for .header */
+}

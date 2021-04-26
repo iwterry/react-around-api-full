@@ -1,0 +1,6 @@
+@media screen and (max-width: 1023px) {
+  .project-form__submit-btn_type_location-create {
+    width: 200px;
+    padding: 12px 0 14px 0;
+  }
+}

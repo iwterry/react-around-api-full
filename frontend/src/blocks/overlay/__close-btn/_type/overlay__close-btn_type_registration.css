@@ -1,0 +1,7 @@
+@media screen and (max-width: 1023px) {
+  .overlay__close-btn_type_registration {
+    top: -56px;
+    right: 50%;
+    transform: translateX(50%) rotate(45deg);
+  }
+}

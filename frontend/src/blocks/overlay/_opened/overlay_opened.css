@@ -1,0 +1,9 @@
+.overlay_opened {
+  visibility: visible;
+  opacity: 1;
+  z-index: 1; 
+  /* 
+    Note: Changing z-index to deal with possible overlap among different Overlay blocks.
+    However, this may not be necessary.
+  */
+}

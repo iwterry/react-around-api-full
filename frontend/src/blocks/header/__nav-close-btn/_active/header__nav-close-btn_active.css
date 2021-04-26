@@ -1,0 +1,5 @@
+@media screen and (max-width: 600px) {
+  .header__nav-close-btn_active {
+    display: inline-block;
+  }  
+}

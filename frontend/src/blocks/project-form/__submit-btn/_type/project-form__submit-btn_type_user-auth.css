@@ -1,0 +1,20 @@
+.project-form__submit-btn_type_user-auth {
+  padding: 14px 0;
+  margin: 0;
+
+  background-color: #fff;
+  color: #000;
+}
+
+.project-form__submit-btn_type_user-auth:hover {
+  opacity: 0.85;
+}
+
+@media screen and (max-width: 1023px) {
+  .project-form__submit-btn_type_user-auth {
+    width: 260px;
+
+    font-size: 16px;
+    line-height: calc(19 / 16);
+  }
+}

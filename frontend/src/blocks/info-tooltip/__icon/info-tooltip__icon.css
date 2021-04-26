@@ -1,0 +1,14 @@
+.info-tooltip__icon {
+  height: 120px;
+  margin-bottom: 40px;
+
+  background-size: 120px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media screen and (min-width: 1280px) {
+  .info-tooltip__icon {
+    margin-bottom: 32px;
+  }
+}

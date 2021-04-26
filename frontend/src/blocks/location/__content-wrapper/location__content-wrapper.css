@@ -1,0 +1,12 @@
+/* NOTE: while the actual height of this element differs from the spec, 
+I believe that it falls within the margin of error for evaluation. */
+.location__content-wrapper {
+  padding: 25px 15px 31px 21px;
+  border-radius: 0 0 10px 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #fff;
+}

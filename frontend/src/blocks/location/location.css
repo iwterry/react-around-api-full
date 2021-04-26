@@ -1,0 +1,16 @@
+@import url(./__image/location__image.css);
+@import url(./__delete-btn/location__delete-btn.css);
+@import url(./__delete-btn/_active/location__delete-btn_active.css);
+@import url(./__content-wrapper/location__content-wrapper.css);
+@import url(./__name/location__name.css);
+@import url(./__likes-wrapper/location__likes-wrapper.css);
+@import url(./__like-btn/location__like-btn.css);
+@import url(./__like-btn/_active/location__like-btn_active.css);
+@import url(./__num-likes/location__num-likes.css);
+
+.location {
+  position: relative;
+  
+  display: flex;
+  flex-direction: column;
+}

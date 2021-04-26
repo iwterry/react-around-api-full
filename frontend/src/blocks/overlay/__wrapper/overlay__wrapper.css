@@ -1,0 +1,4 @@
+.overlay__wrapper {
+  position: relative;
+  /* so that the close will be positioned relatively to this */
+}

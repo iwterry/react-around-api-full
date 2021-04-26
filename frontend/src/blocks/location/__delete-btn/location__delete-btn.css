@@ -1,0 +1,27 @@
+.location__delete-btn {
+  width: 18px;
+  height: 19.3px;
+  padding: 0;
+  border: none;
+
+  position: absolute;
+  top: 20px;
+  right: 17px;
+
+  display: none; /* so that delete button is not shown by default */
+
+  background-image: url(../../../images/location-delete-icon.svg);
+  background-position: center;
+  background-size: cover;
+  background-color: inherit;
+}
+
+.location__delete-btn:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.location__delete-btn:focus {
+  outline: 1px solid #2f80ed;
+  /* looks as if it appears in project demonstration */
+}

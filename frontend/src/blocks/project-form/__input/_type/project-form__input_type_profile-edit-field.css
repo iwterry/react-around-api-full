@@ -1,0 +1,8 @@
+@media screen and (max-width: 1023px) {
+  .project-form__input_type_profile-edit-field {
+    padding-bottom: 12px;
+
+    font-size: 14px;
+    line-height: calc(17 / 14); /* 17px */
+  }
+}

@@ -1,0 +1,10 @@
+.header__hamburger-menu-line {
+  width: 24px;
+  height: 0;
+  border-bottom: 3px solid #fff;
+  margin: 0 0 7px;
+}
+
+.header__hamburger-menu-line:last-child {
+  margin-bottom: 0;
+}

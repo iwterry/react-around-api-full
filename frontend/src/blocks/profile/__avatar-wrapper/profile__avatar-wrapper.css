@@ -1,0 +1,9 @@
+.profile__avatar-wrapper {
+  position: relative;
+}
+
+@media screen and (min-width: 1280px) {
+  .profile__avatar-wrapper {
+    margin-right: 30px;
+  }
+}

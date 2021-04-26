@@ -1,0 +1,29 @@
+.profile__edit-btn {
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid #fff;
+
+  background-image: url(../../../images/profile-edit-icon.svg);
+  background-size: 7.5px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: inherit;
+
+  grid-area: profile-edit-btn;
+}
+
+.profile__edit-btn:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 1280px) {
+  .profile__edit-btn {
+    width: 24px;
+    height: 24px;
+
+    background-size: 10px;
+  }
+}

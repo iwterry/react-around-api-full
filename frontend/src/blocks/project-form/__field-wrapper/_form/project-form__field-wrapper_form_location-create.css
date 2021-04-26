@@ -1,0 +1,5 @@
+@media screen and (max-width: 1023px) {
+  .project-form__field-wrapper_form_location-create {
+    width: 200px;
+  }
+}

@@ -1,0 +1,6 @@
+@media screen and (max-width: 1023px) {
+  .project-form_type_location-create {
+    width: 240px;
+    padding: 30px 0;
+  }
+}

@@ -1,0 +1,20 @@
+.header__nav-close-btn {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+
+  background-image: url(../../../images/profile-add-icon.svg);
+  background-size: cover;
+  background-position: center;
+  background-color: inherit;
+
+  cursor: pointer;
+  transform: rotate(45deg);
+
+  display: none;
+}
+
+.header__nav-close-btn:hover {
+  opacity: 0.6;
+}

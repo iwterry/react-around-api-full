@@ -1,0 +1,32 @@
+.overlay__close-btn {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+
+  background-image: url(../../../images/profile-add-icon.svg);
+  background-size: cover;
+  background-position: center;
+  background-color: inherit;
+
+  cursor: pointer;
+  transform: rotate(45deg);
+}
+
+.overlay__close-btn:hover {
+  opacity: 0.6;
+}
+
+@media screen and (min-width: 1024px) {
+  .overlay__close-btn {
+    top: -41px;
+    right: -41px;
+
+    width: 40px;
+    height: 40px;
+  }
+}

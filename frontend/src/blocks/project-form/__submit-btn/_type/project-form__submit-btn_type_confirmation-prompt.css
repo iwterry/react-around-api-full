@@ -1,0 +1,9 @@
+.project-form__submit-btn_type_confirmation-prompt {
+  padding: 14px;
+}
+
+@media screen and (max-width: 1023px) {
+  .project-form__submit-btn_type_confirmation-prompt {
+    width: 200px;
+  }
+}

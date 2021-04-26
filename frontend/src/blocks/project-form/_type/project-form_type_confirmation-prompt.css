@@ -1,0 +1,7 @@
+/* Note: No mobile design specs were given for confirmation prompt, so I made my own design. */ 
+@media screen and (max-width: 1023px) {
+  .project-form_type_confirmation-prompt {
+    width: 250px;
+    padding: 25px 0;
+  }
+}

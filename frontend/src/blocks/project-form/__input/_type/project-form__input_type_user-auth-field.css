@@ -1,0 +1,9 @@
+.project-form__input_type_user-auth-field {
+  padding-bottom: 13px;
+  border-color: #fff;
+
+  font-size: 14px;
+  line-height: calc(17 / 14);
+  background-color: #000;
+  color: #fff;
+}

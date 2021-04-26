@@ -1,0 +1,6 @@
+@import url(./__image/image-popup__image.css);
+@import url(./__title/image-popup__title.css);
+
+.image-popup {
+  margin: 0;
+}
