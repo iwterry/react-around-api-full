@@ -39,7 +39,7 @@ app.use((req, res, next) => {
     'https://www.practicum-iwterry.students.nomoreparties.site',
     'http://practicum-iwterry.students.nomoreparties.site',
     'http://www.practicum-iwterry.students.nomoreparties.site',
-    'localhost'
+    'http://localhost'
   ];
 
   if(allowedOrigins.includes(origin)) {
