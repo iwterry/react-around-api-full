@@ -36,13 +36,13 @@ app.use((req, res, next) => {
 
   const allowedOrigins = [
     'https://practicum-iwterry.students.nomoreparties.site',
-    'http://practicum-iwterry.students.nomoreparties.site'
+    'http://practicum-iwterry.students.nomoreparties.site',
+    'localhost'
   ];
-
-  console.log('origin', origin, allowedOrigins.includes(origin));
 
   if(allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', true);
   }
 
   next();
