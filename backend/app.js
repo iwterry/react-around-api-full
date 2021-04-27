@@ -39,6 +39,8 @@ app.use((req, res, next) => {
     'http://practicum-iwterry.students.nomoreparties.site'
   ];
 
+  console.log('origin', origin, allowedOrigins.includes(origin));
+
   if(allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
   }
