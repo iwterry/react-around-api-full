@@ -39,8 +39,10 @@ app.use((req, res, next) => {
     'https://www.practicum-iwterry.students.nomoreparties.site',
     'http://practicum-iwterry.students.nomoreparties.site',
     'http://www.practicum-iwterry.students.nomoreparties.site',
-    'http://localhost'
+    'http://localhost:3000'
   ];
+
+  console.log('origin', origin, allowedOrigins.includes(origin));
 
   if(allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
