@@ -82,6 +82,6 @@ class AroundApi extends Api {
 }
 
 export default new AroundApi(
-  'https://api.practicum-iwterry.students.nomoreparties.site:3000',
+  'https://api.practicum-iwterry.students.nomoreparties.site',
   { credentials: 'include' }
 );
