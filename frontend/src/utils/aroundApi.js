@@ -5,6 +5,9 @@ class AroundApi extends Api {
     return this.fetchData({
       relativePathFromBase: 'signup',
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ email, password })
     });
   }
@@ -13,6 +16,9 @@ class AroundApi extends Api {
     return this.fetchData({
       relativePathFromBase: 'signin',
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ email, password })
     });
   }
@@ -37,7 +43,7 @@ class AroundApi extends Api {
     return this.fetchData({ 
       relativePathFromBase: 'cards',
       method: 'POST',
-      additionalHeaderProps: {
+      headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ name, link })
@@ -48,7 +54,7 @@ class AroundApi extends Api {
     return this.fetchData({ 
       relativePathFromBase: 'users/me',
       method: 'PATCH',
-      additionalHeaderProps: {
+      headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ name, about })
@@ -66,7 +72,7 @@ class AroundApi extends Api {
     return this.fetchData({ 
       relativePathFromBase: 'users/me/avatar',
       method: 'PATCH',
-      additionalHeaderProps: {
+      headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ avatar: avatarLink })
