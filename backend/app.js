@@ -36,7 +36,9 @@ app.use((req, res, next) => {
 
   const allowedOrigins = [
     'https://practicum-iwterry.students.nomoreparties.site',
+    'https://www.practicum-iwterry.students.nomoreparties.site',
     'http://practicum-iwterry.students.nomoreparties.site',
+    'http://www.practicum-iwterry.students.nomoreparties.site',
     'localhost'
   ];
 
