@@ -1,6 +1,5 @@
 {
   "name": "react-around-auth",
-  "homepage": "https://github.com/iwterry/react-around-api-full",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
