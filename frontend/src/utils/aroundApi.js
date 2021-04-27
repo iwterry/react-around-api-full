@@ -1,12 +1,36 @@
-import Api from "./Api";
+import Api from './Api';
 
-class AppDataApi extends Api {
+class AroundApi extends Api {
+  signup(email, password) {
+    return this.fetchData({
+      relativePathFromBase: 'signup',
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    });
+  }
+
+  signin(email, password) {
+    return this.fetchData({
+      relativePathFromBase: 'signin',
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    });
+  }
+
+  getEmail() {
+    return this.getUserProfile().then(({ email }) => email);
+  }
+
   getInitialCards() {
-    return this.fetchData({ relativePathFromBase: 'cards' });
+    return this.fetchData({
+      relativePathFromBase: 'cards'
+    });
   }
 
   getUserProfile() {
-    return this.fetchData({ relativePathFromBase: 'users/me' });
+    return this.fetchData({
+      relativePathFromBase: 'users/me'
+    });
   }
 
   createCard(name, link) {
@@ -51,19 +75,13 @@ class AppDataApi extends Api {
 
   updateCardLikes(cardId, isLiking ) {
     return this.fetchData({ 
-      relativePathFromBase: `cards/likes/${cardId}`,
+      relativePathFromBase: `cards/${cardId}/likes`,
       method: (isLiking ? 'PUT' : 'DELETE')
     });
   }
 }
 
-const authToken = 'f9c51bc0-ecec-42b1-bdb4-bcfabdba3e4f';
-
-const appDataApi = new AppDataApi({
-  baseUrl: 'https://around.nomoreparties.co/v1/group-8', 
-  headers: { 
-    authorization: authToken 
-  }
-});
-
-export default appDataApi;
+export default new AroundApi(
+  'https://api.practicum-iwterry.students.nomoreparties.site/',
+  { credentials: 'include' }
+);

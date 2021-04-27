@@ -1,20 +1,25 @@
-/*
-  Note: the name of the file is Api.js instead of api.js to reflect that the
-  file will export a class and not an instance of a class like before.
-*/
 class Api {
-  constructor({ baseUrl, headers={} }) {
+  constructor(baseUrl, { headers={}, ...others }={}) {
     this._baseUrl = baseUrl;
     this._headers = headers;
+    this._others = others;
   }
 
-  fetchData({ relativePathFromBase, method='GET', additionalHeaderProps={}, body=null}) {
+  fetchData({
+    relativePathFromBase='',
+    method='GET',
+    headers={},
+    body=null,
+    ...others
+  }) {
     const init = {
       method,
       headers: {
         ...this._headers,
-        ...additionalHeaderProps
-      }
+        ...headers
+      },
+      ...this._others,
+      ...others
     };
 
     if(body !== null) {

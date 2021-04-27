@@ -12,8 +12,7 @@ import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
 import ConfirmationPromptPopup from './ConfirmationPromptPopup.js';
 
-import appDataApi from '../utils/appDataApi.js';
-import appAuthApi from '../utils/appAuthApi.js';
+import aroundApi from '../utils/aroundApi.js';
 import { logErrors } from '../utils/utils.js';
 
 import defaultAvatar from '../images/profile-avatar.jpg';
@@ -88,30 +87,30 @@ function App() {
   }, [isOpen]);
 
   React.useEffect(() => {
-    appDataApi.getUserProfile()
+    aroundApi.getUserProfile()
       .then(setCurrentUser)
       .catch(logErrors);
   }, []);
 
   React.useEffect(() => {
-    appDataApi.getInitialCards()
+    aroundApi.getInitialCards()
       .then(setCards)
       .catch(logErrors);
   }, []);
 
   React.useEffect(() => {
-    const token = localStorage.getItem('jwt');
-    if(token) {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === null;
+    if(isLoggedIn) {
       setIsLoggedIn(true);
-      appAuthApi.getEmail(token)
-        .then(({ data: { email }}) => setUserEmail(email))
+      aroundApi.getEmail()
+        .then(setUserEmail)
         .catch(logErrors);
     }
   }, []);
 
 
   function handleCardLike(clickedCardId, isClickedCardLikedAlreadyByUser) {
-    appDataApi.updateCardLikes(clickedCardId, !isClickedCardLikedAlreadyByUser)
+    aroundApi.updateCardLikes(clickedCardId, !isClickedCardLikedAlreadyByUser)
       .then((updatedCard) => {
         const updatedCards = cards.map((card) => card._id === clickedCardId ? updatedCard : card);
         setCards(updatedCards);
@@ -145,7 +144,7 @@ function App() {
 
   function handleUpdateUser(name, about) {
     setIsUpdatingProfile(true);
-    appDataApi.updateUserProfile(name, about)
+    aroundApi.updateUserProfile(name, about)
       .then((user) => {
         setCurrentUser(user);
         closeAllPopups();
@@ -156,7 +155,7 @@ function App() {
 
   function handleUpdateAvatar(avatar) {
     setIsUpdatingAvatar(true);
-    appDataApi.updateUserAvatar(avatar)
+    aroundApi.updateUserAvatar(avatar)
       .then((user) => {
         setCurrentUser(user);
         closeAllPopups();
@@ -167,7 +166,7 @@ function App() {
 
   function handleAddPlace(name, link) {
     setIsCreatingPlace(true);
-    appDataApi.createCard(name, link)
+    aroundApi.createCard(name, link)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -178,9 +177,8 @@ function App() {
 
   function handleConfirmation() {
     setIsDeletingAfterConfirming(true);
-    appDataApi.deleteCard(idOfCardToBeDeleted)
-      .then((data) => {
-        console.log('returned:', data);
+    aroundApi.deleteCard(idOfCardToBeDeleted)
+      .then(() => {
         const updatedCards = cards.filter((aCard) => aCard._id !== idOfCardToBeDeleted);
         setCards(updatedCards);
         closeAllPopups();
@@ -191,7 +189,7 @@ function App() {
 
   function handleRegisterClick(email, password) { 
     setIsRegistering(true);
-    appAuthApi.signup(email, password)
+    aroundApi.signup(email, password)
       .then((data) => {
         setIsRegistrationSuccess(true);
         history.push('/signin');
@@ -204,11 +202,11 @@ function App() {
 
   function handleLoginClick(email, password) {
     setIsLoggingIn(true);
-    appAuthApi.signin(email, password)
-      .then(({ token }) => {
-        localStorage.setItem('jwt', token);
+    aroundApi.signin(email, password)
+      .then(() => {
         setUserEmail(email);
         setIsLoggedIn(true);
+        localStorage.setItem('isLoggedIn', 'true');
         history.push('/');
       })
       .catch((err) => {
@@ -217,9 +215,9 @@ function App() {
   }
 
   function handleSignOut() {
-    localStorage.removeItem('jwt');
     setIsLoggedIn(false);
     setUserEmail('');
+    localStorage.removeItem('isLoggeddIn');
     history.push('/signin');
   }
 
