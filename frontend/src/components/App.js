@@ -87,19 +87,23 @@ function App() {
   }, [isOpen]);
 
   React.useEffect(() => {
-    aroundApi.getUserProfile()
-      .then(setCurrentUser)
-      .catch(logErrors);
-  }, []);
+    if(isLoggedIn) {
+      aroundApi.getUserProfile()
+        .then(setCurrentUser)
+        .catch(logErrors);
+    }
+  }, [isLoggedIn]);
 
   React.useEffect(() => {
-    aroundApi.getInitialCards()
-      .then(setCards)
-      .catch(logErrors);
-  }, []);
+    if(isLoggedIn) {
+      aroundApi.getInitialCards()
+        .then(setCards)
+        .catch(logErrors);
+    }
+  }, [isLoggedIn]);
 
   React.useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === null;
+    const isLoggedIn = localStorage.getItem('isLoggedIn') !== null;
     if(isLoggedIn) {
       setIsLoggedIn(true);
       aroundApi.getEmail()
