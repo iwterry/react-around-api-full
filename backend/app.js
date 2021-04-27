@@ -31,6 +31,20 @@ app.use(requestLogger);
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+
+  const allowedOrigins = [
+    'https://practicum-iwterry.students.nomoreparties.site',
+    'http://practicum-iwterry.students.nomoreparties.site'
+  ];
+
+  if(allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+
+  next();
+});
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
