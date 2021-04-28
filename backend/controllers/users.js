@@ -105,8 +105,7 @@ module.exports.login = (req, res, next) => {
         .cookie('jwt', token, {
           httpOnly: true,
           maxAge: sevenDaysInMilliSeconds,
-          sameSite: true,
-          domain: 'practicum-iwterry.students.nomoreparties.site/',
+          sameSite: 'Lax',
         })
         .end();
     })
