@@ -106,6 +106,7 @@ module.exports.login = (req, res, next) => {
           httpOnly: true,
           maxAge: sevenDaysInMilliSeconds,
           sameSite: true,
+          domain: 'practicum-iwterry.students.nomoreparties.site/',
         })
         .end();
     })
