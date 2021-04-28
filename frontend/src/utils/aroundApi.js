@@ -87,7 +87,14 @@ class AroundApi extends Api {
   }
 }
 
+let baseUrl ='https://api.practicum-iwterry.students.nomoreparties.site';
+
+if(process.env.NODE_ENV === 'development') {
+  baseUrl = 'http://localhost:3001';
+}
+
+console.log(baseUrl);
 export default new AroundApi(
-  'https://api.practicum-iwterry.students.nomoreparties.site',
+  baseUrl,
   { credentials: 'include' }
 );

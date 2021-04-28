@@ -82,14 +82,16 @@ module.exports.createUser = (req, res, next) => {
         }
         throw err;
       }))
-    .then((createdUser) => res.json(getUserInfoDisplayedToClient(createdUser)))
+    .then((createdUser) => res
+      .status(201)
+      .json(getUserInfoDisplayedToClient(createdUser)))
     .catch(next);
 };
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   const sevenDaysInMilliSeconds = 1000 * 60 * 60 * 24 * 7;
-  console.log('-----------> login location 1 <-----------');
+
   User
     .findUserByCredentials(email, password)
     .then((user) => {
@@ -98,7 +100,7 @@ module.exports.login = (req, res, next) => {
         'fd6fff9317435012847d32443f758c50bad13aeca2ddbdda92d88056ef5dc7df',
         { expiresIn: '7 days' },
       );
-      console.log('-----------> login location 2 <-----------');
+
       res
         .cookie('jwt', token, {
           httpOnly: true,

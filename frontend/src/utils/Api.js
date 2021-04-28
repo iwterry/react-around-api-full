@@ -12,24 +12,24 @@ class Api {
     body=null,
     ...others
   }) {
-    const init = {
-      method,
-      headers: {
-        ...this._headers,
-        ...headers
-      },
-      ...this._others,
-      ...others
-    };
+    const allHeaders = { ...this._headers, ...headers };
+    const allOthers = { ...this._others, ...others };
+    const init = { method, headers: allHeaders, ...allOthers};
+    const resource = `${this._baseUrl}/${relativePathFromBase}`;
 
     if(body !== null) {
       init.body = body;
     }
 
-    const url = `${this._baseUrl}/${relativePathFromBase}`;
+    return fetch(resource, init).then((res) => {
+      if(res.ok) {
+        if(res.status === 204 || res.headers.get('Content-Length') === '0') return Promise.resolve(null);
 
-    return fetch(url, init).then((res) => {
-      if(res.ok) return res.json();
+        const contentType = res.headers.get('Content-Type');
+        if(contentType && contentType.startsWith('application/json')) return res.json();
+        
+        return res.text();
+      }
       else return Promise.reject(res.status);
     });
   }

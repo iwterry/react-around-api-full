@@ -31,25 +31,28 @@ app.use(requestLogger);
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-app.use((req, res, next) => {
+
+app.use((req, res, next) => { // middleware deals with cross origin issues
   const { origin } = req.headers;
+  const { method } = req;
 
   const allowedOrigins = [
     'https://practicum-iwterry.students.nomoreparties.site',
     'https://www.practicum-iwterry.students.nomoreparties.site',
     'http://practicum-iwterry.students.nomoreparties.site',
     'http://www.practicum-iwterry.students.nomoreparties.site',
-    'http://localhost:3000'
+    'http://localhost:3000',
   ];
 
-  if(allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-  }
+  if (allowedOrigins.includes(origin)) {
+    res.header('access-control-allow-origin', origin);
+    res.header('access-control-allow-credentials', true);
+    res.header('access-control-allow-headers', 'Content-Type');
+    res.header('access-control-allow-methods', 'GET, POST, PUT, PATCH, DELETE');
 
-  next();
+    if (method === 'OPTIONS') res.send(); // deal with preflight used for CORS
+    else next(); // deals with actual request and not preflight
+  } else next(); // deals with origins not allowed
 });
 
 app.post('/signin', celebrate({
@@ -68,10 +71,8 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-app.use(authMiddleware);
-
-app.use('/', userRouter);
-app.use('/', cardRouter);
+app.use('/users', authMiddleware, userRouter);
+app.use('/cards', authMiddleware, cardRouter);
 app.use((req, res, next) => {
   next(new NotFoundHttpError());
 });

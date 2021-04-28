@@ -221,7 +221,7 @@ function App() {
   function handleSignOut() {
     setIsLoggedIn(false);
     setUserEmail('');
-    localStorage.removeItem('isLoggeddIn');
+    localStorage.removeItem('isLoggedIn');
     history.push('/signin');
   }
 
