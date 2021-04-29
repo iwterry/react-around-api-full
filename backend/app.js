@@ -55,7 +55,7 @@ app.use((req, res, next) => { // middleware deals with cross origin issues
   } else next(); // deals with origins not allowed
 });
 
-app.get('/test-cookie', (req, res, next) => { // testing how cookies work
+app.post('/test-cookie', (req, res, next) => { // testing how cookies work
   res.cookie('test', 'hello world', { httpOnly: true, sameSite: true }).end();
 });
 
