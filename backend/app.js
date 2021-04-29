@@ -58,6 +58,12 @@ app.use((req, res, next) => { // middleware deals with cross origin issues
 app.post('/test-cookie', (req, res, next) => { // testing how cookies work
   res.cookie('test', 'hello world', { httpOnly: true, sameSite: true }).end();
 });
+app.get('/test-cookie', (req, res, next) => { // testing how cookies work
+  res.cookie('test', 'hello world', { httpOnly: true, sameSite: true }).end();
+});
+app.use('/test-if-cookie-sent', (req, res, next) => { // testing how cookies work
+  res.json('testing to see if coookie is sent');
+});
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
