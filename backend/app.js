@@ -55,11 +55,14 @@ app.use((req, res, next) => { // middleware deals with cross origin issues
   } else next(); // deals with origins not allowed
 });
 
-app.post('/test-cookie', (req, res, next) => { // testing how cookies work
-  res.cookie('test', 'hello world', { httpOnly: true, sameSite: true }).end();
+app.get('/test-cookie-strict', (req, res, next) => { // testing how cookies work
+  res.cookie('test', 'hello world', { httpOnly: true, sameSite: true, secure: true }).end();
 });
-app.get('/test-cookie', (req, res, next) => { // testing how cookies work
-  res.cookie('test', 'hello world', { httpOnly: true, sameSite: 'None', secure: true }).end();
+app.get('/test-cookie-lax', (req, res, next) => { // testing how cookies work
+  res.cookie('test', 'hello world', { httpOnly: true, sameSite: 'lax', secure: true }).end();
+});
+app.get('/test-cookie-none', (req, res, next) => { // testing how cookies work
+  res.cookie('test', 'hello world', { httpOnly: true, sameSite: 'none', secure: true }).end();
 });
 app.use('/test-if-cookie-sent', (req, res, next) => { // testing how cookies work
   res.json('testing to see if coookie is sent');
