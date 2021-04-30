@@ -47,7 +47,8 @@ class AroundApi extends Api {
       relativePathFromBase: 'signout',
       headers: {
         'Authorization': this.getToken(),
-      }
+      },
+      credentials: 'include',
     })
   }
 
