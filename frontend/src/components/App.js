@@ -32,7 +32,8 @@ function App() {
   const [ isUpdatingProfile, setIsUpdatingProfile ] = React.useState(false);
   const [ isCreatingPlace, setIsCreatingPlace ] = React.useState(false);
   const [ isDeletingAfterConfirming, setIsDeletingAfterConfirming ] = React.useState(false);
-  const [ isRegistrationError, setIsRegistrationError ] = React.useState(false);
+  const [ isError, setIsError ] = React.useState(false);
+  const [ errText, setErrText ] = React.useState('');
   const [ isRegistrationSuccess, setIsRegistrationSuccess ] = React.useState(false);
   const [ isRegistering, setIsRegistering ] = React.useState(false);
   const [ isUserOnRegistrationPage, setIsUserOnRegistrationPage ] = React.useState(false);
@@ -46,7 +47,7 @@ function App() {
     idOfCardToBeDeleted !== null || /* for confirmation popup */
     selectedCard._id !== null   ||  /* for image popup */
     isRegistrationSuccess ||
-    isRegistrationError
+    isError
   );
   const isLoggedIn = currentUser !== null;
 
@@ -59,18 +60,41 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIdOfCardToBeDeleted(null);
     setSelectedCard({ ...selectedCard, _id: null });
-    setIsRegistrationError(false);
+    setIsError(false);
+    setErrText('');
     setIsRegistrationSuccess(false);
   }
+
+  function handleError(httpStatusCode, description='') {
+    logErrors(httpStatusCode);
+    setIsError(true);
+
+    if(description) {
+      setErrText(description);
+      return;
+    }
+
+    switch(httpStatusCode) {
+      case 400:
+      case 401:
+        setErrText('The information provided was incorrect. Please try again.');
+        break;
+      case 403:
+        setErrText('You do not have permission to perform this action.');
+        break;
+      default: // handles 404 (which should not occur) and 500 errors
+        setErrText('Oops, something went wrong! Please try again.');
+    }
+  } 
 
   function setInitDataForLoggedInUser() {
     aroundApi.getUserProfile()
       .then(setCurrentUser)
-      .catch(logErrors);
+      .catch(handleError);
 
     aroundApi.getInitialCards()
       .then(setCards)
-      .catch(logErrors);
+      .catch(handleError);
   }
 
   function handleClosingAllPopupsUsingEscKey(evt) {
@@ -95,7 +119,7 @@ function App() {
           aroundApi.setToken(jwt);
           setInitDataForLoggedInUser();
         }
-      }).catch((logErrors));
+      }).catch(handleError);
   }, []);
 
 
@@ -105,7 +129,7 @@ function App() {
         const updatedCards = cards.map((card) => card._id === clickedCardId ? updatedCard : card);
         setCards(updatedCards);
       })
-      .catch(logErrors);
+      .catch(handleError);
   }
 
   function handleCardDelete(id) {
@@ -139,7 +163,7 @@ function App() {
         setCurrentUser(user);
         closeAllPopups();
       })
-      .catch(logErrors)
+      .catch(handleError)
       .finally(() =>  setIsUpdatingProfile(false));
   }
 
@@ -150,7 +174,7 @@ function App() {
         setCurrentUser(user);
         closeAllPopups();
       })
-      .catch(logErrors)
+      .catch(handleError)
       .finally(() => setIsUpdatingAvatar(false));
   }
 
@@ -161,7 +185,7 @@ function App() {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
-      .catch(logErrors)
+      .catch(handleError)
       .finally(() => setIsCreatingPlace(false));
   }
 
@@ -173,7 +197,7 @@ function App() {
         setCards(updatedCards);
         closeAllPopups();
       })
-      .catch(logErrors)
+      .catch(handleError)
       .finally(() => setIsDeletingAfterConfirming(false));
   }
 
@@ -184,10 +208,8 @@ function App() {
         setIsRegistrationSuccess(true);
         history.push('/signin');
       })
-      .catch((err) => {
-        logErrors(err);
-        setIsRegistrationError(true);
-      }).finally(() => setIsRegistering(false));
+      .catch(handleError)
+      .finally(() => setIsRegistering(false));
   }
 
   function handleLoginClick(email, password) {
@@ -197,9 +219,8 @@ function App() {
         aroundApi.setToken(jwt);
         setInitDataForLoggedInUser();
       })
-      .catch((err) => {
-        logErrors(err);
-      }).finally(() => setIsLoggingIn(false));
+      .catch(handleError)
+      .finally(() => setIsLoggingIn(false));
   }
 
   function handleSignOut() {
@@ -207,7 +228,7 @@ function App() {
       .then(() => {
         setCurrentUser(null);
         history.push('/signin');
-      }).catch(logErrors);
+      }).catch(handleError);
   }
 
   function redirectWhenUserIsLoggedIn(Component, props) {
@@ -315,8 +336,8 @@ function App() {
         />
         <InfoTooltip 
           iconType="error" 
-          description="Oops, something went wrong! Please try again."
-          isOpen={isRegistrationError}
+          description={errText}
+          isOpen={isError}
           onClose={closeAllPopups}
         />
 
