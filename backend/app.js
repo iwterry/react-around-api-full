@@ -55,6 +55,12 @@ app.use((req, res, next) => { // middleware deals with cross origin issues
   } else next(); // deals with origins not allowed
 });
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Server will crash now');
+  }, 0);
+});
+
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -82,6 +88,8 @@ app.get('/is-token-valid', authWithCookie);
 
 app.use('/users', authWithAuthorizationHeader, userRouter);
 app.use('/cards', authWithAuthorizationHeader, cardRouter);
+
+
 app.use(authWithAuthorizationHeader, (req, res, next) => {
   next(new NotFoundHttpError());
 });
