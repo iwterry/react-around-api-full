@@ -7,7 +7,7 @@ const { errors, celebrate, Joi } = require('celebrate');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 
-const authMiddleware = require('./middleware/auth');
+const { authWithAuthorizationHeader, authWithCookie } = require('./middleware/auth');
 const { login, createUser } = require('./controllers/users');
 
 const NotFoundHttpError = require('./errors/NotFoundHttpError');
@@ -47,7 +47,7 @@ app.use((req, res, next) => { // middleware deals with cross origin issues
   if (allowedOrigins.includes(origin)) {
     res.header('access-control-allow-origin', origin);
     res.header('access-control-allow-credentials', true);
-    res.header('access-control-allow-headers', 'Content-Type');
+    res.header('access-control-allow-headers', 'Content-Type, Authorization');
     res.header('access-control-allow-methods', 'GET, POST, PUT, PATCH, DELETE');
 
     if (method === 'OPTIONS') res.send(); // deal with preflight used for CORS
@@ -71,9 +71,18 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-app.use('/users', authMiddleware, userRouter);
-app.use('/cards', authMiddleware, cardRouter);
-app.use((req, res, next) => {
+// eslint-disable-next-line no-unused-vars
+app.get('/signout', authWithAuthorizationHeader, (req, res, next) => res.clearCookie('jwt', {
+  httpOnly: true,
+  sameSite: 'none',
+  secure: true,
+}).end());
+
+app.get('/is-token-valid', authWithCookie);
+
+app.use('/users', authWithAuthorizationHeader, userRouter);
+app.use('/cards', authWithAuthorizationHeader, cardRouter);
+app.use(authWithAuthorizationHeader, (req, res, next) => {
   next(new NotFoundHttpError());
 });
 

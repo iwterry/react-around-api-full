@@ -1,6 +1,17 @@
 import Api from './Api';
 
 class AroundApi extends Api {
+  _token;
+  
+
+  setToken(token) {
+    this._token = token;
+  }
+
+  getToken() {
+    return 'Bearer ' + this._token;
+  }
+
   signup(email, password) {
     return this.fetchData({
       relativePathFromBase: 'signup',
@@ -19,23 +30,43 @@ class AroundApi extends Api {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password }),
+      credentials: 'include'
     });
   }
 
-  getEmail() {
-    return this.getUserProfile().then(({ email }) => email);
+  checkIfUserIsLoggedIn() {
+    return this.fetchData({
+      relativePathFromBase: 'is-token-valid',
+      credentials: 'include',
+    });
+  }
+
+  signout() {
+    return this.fetchData({
+      relativePathFromBase: 'signout',
+      headers: {
+        'Authorization': this.getToken(),
+      }
+    })
   }
 
   getInitialCards() {
     return this.fetchData({
-      relativePathFromBase: 'cards'
+      relativePathFromBase: 'cards',
+      headers: {
+        'Authorization': this.getToken(),
+      }
     });
   }
 
   getUserProfile() {
+    console.log(this.getToken())
     return this.fetchData({
-      relativePathFromBase: 'users/me'
+      relativePathFromBase: 'users/me',
+      headers: {
+        'Authorization': this.getToken(),
+      }
     });
   }
 
@@ -44,7 +75,8 @@ class AroundApi extends Api {
       relativePathFromBase: 'cards',
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': this.getToken(),
       },
       body: JSON.stringify({ name, link })
     });
@@ -55,7 +87,8 @@ class AroundApi extends Api {
       relativePathFromBase: 'users/me',
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': this.getToken(),
       },
       body: JSON.stringify({ name, about })
     });
@@ -64,7 +97,10 @@ class AroundApi extends Api {
   deleteCard(cardId) {
     return this.fetchData({ 
       relativePathFromBase:  `cards/${cardId}`,
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'Authorization': this.getToken(),
+      }
     });
   }
 
@@ -73,7 +109,8 @@ class AroundApi extends Api {
       relativePathFromBase: 'users/me/avatar',
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': this.getToken(),
       },
       body: JSON.stringify({ avatar: avatarLink })
     });
@@ -82,7 +119,10 @@ class AroundApi extends Api {
   updateCardLikes(cardId, isLiking ) {
     return this.fetchData({ 
       relativePathFromBase: `cards/${cardId}/likes`,
-      method: (isLiking ? 'PUT' : 'DELETE')
+      method: (isLiking ? 'PUT' : 'DELETE'),
+      headers: {
+        'Authorization': this.getToken(),
+      }
     });
   }
 }
@@ -96,5 +136,4 @@ if(process.env.NODE_ENV === 'development') {
 console.log(baseUrl);
 export default new AroundApi(
   baseUrl,
-  { credentials: 'include' }
 );

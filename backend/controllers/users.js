@@ -108,7 +108,7 @@ module.exports.login = (req, res, next) => {
           sameSite: 'none',
           secure: true,
         })
-        .end();
+        .json({ jwt: token });
     })
     .catch(next);
 };

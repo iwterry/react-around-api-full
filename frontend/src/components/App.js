@@ -15,8 +15,6 @@ import ConfirmationPromptPopup from './ConfirmationPromptPopup.js';
 import aroundApi from '../utils/aroundApi.js';
 import { logErrors } from '../utils/utils.js';
 
-import defaultAvatar from '../images/profile-avatar.jpg';
-
 import Register from './Register.js';
 import InfoTooltip from './InfoTooltip.js';
 import Login from './Login.js';
@@ -26,37 +24,31 @@ function App() {
   const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen ]  = React.useState(false);
   const [ isAddPlacePopupOpen, setIsAddPlacePopupOpen ] = React.useState(false);
   const [ isEditAvatarPopupOpen, setIsEditAvatarPopupOpen ] = React.useState(false);
-  const [ selectedCard, setSelectedCard ] = React.useState({ _id: null, link: '#',  name: '' });
-  const [ currentUser, setCurrentUser ] = React.useState({
-    name: 'Jacques Cousteau',
-    about: 'Explorer',
-    avatar: defaultAvatar,
-    _id: null
-  });
+  const [ selectedCard, setSelectedCard ] = React.useState({ _id: null, link: '#', name: '' });
+  const [ currentUser, setCurrentUser ] = React.useState(null);
   const [ cards, setCards ] = React.useState([]);
   const [ idOfCardToBeDeleted, setIdOfCardToBeDeleted ] = React.useState(null);
   const [ isUpdatingAvatar, setIsUpdatingAvatar ] = React.useState(false);
   const [ isUpdatingProfile, setIsUpdatingProfile ] = React.useState(false);
   const [ isCreatingPlace, setIsCreatingPlace ] = React.useState(false);
   const [ isDeletingAfterConfirming, setIsDeletingAfterConfirming ] = React.useState(false);
-  const [ userEmail, setUserEmail ] = React.useState('');
   const [ isRegistrationError, setIsRegistrationError ] = React.useState(false);
   const [ isRegistrationSuccess, setIsRegistrationSuccess ] = React.useState(false);
   const [ isRegistering, setIsRegistering ] = React.useState(false);
   const [ isUserOnRegistrationPage, setIsUserOnRegistrationPage ] = React.useState(false);
   const [ isLoggingIn, setIsLoggingIn ] = React.useState(false);
-  const [ isLoggedIn, setIsLoggedIn ] = React.useState(false);
   const [ isUserOnLoginPage, setIsUserOnLoginPage ] = React.useState(false);
 
   const isOpen = (
     isEditAvatarPopupOpen || 
     isEditProfilePopupOpen || 
     isAddPlacePopupOpen || 
-    idOfCardToBeDeleted || /* for confirmation popup */
-    selectedCard._id    ||  /* for image popup */
+    idOfCardToBeDeleted !== null || /* for confirmation popup */
+    selectedCard._id !== null   ||  /* for image popup */
     isRegistrationSuccess ||
     isRegistrationError
   );
+  const isLoggedIn = currentUser !== null;
 
   const history = useHistory();
 
@@ -69,6 +61,16 @@ function App() {
     setSelectedCard({ ...selectedCard, _id: null });
     setIsRegistrationError(false);
     setIsRegistrationSuccess(false);
+  }
+
+  function setInitDataForLoggedInUser() {
+    aroundApi.getUserProfile()
+      .then(setCurrentUser)
+      .catch(logErrors);
+
+    aroundApi.getInitialCards()
+      .then(setCards)
+      .catch(logErrors);
   }
 
   function handleClosingAllPopupsUsingEscKey(evt) {
@@ -87,29 +89,13 @@ function App() {
   }, [isOpen]);
 
   React.useEffect(() => {
-    if(isLoggedIn) {
-      aroundApi.getUserProfile()
-        .then(setCurrentUser)
-        .catch(logErrors);
-    }
-  }, [isLoggedIn]);
-
-  React.useEffect(() => {
-    if(isLoggedIn) {
-      aroundApi.getInitialCards()
-        .then(setCards)
-        .catch(logErrors);
-    }
-  }, [isLoggedIn]);
-
-  React.useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') !== null;
-    if(isLoggedIn) {
-      setIsLoggedIn(true);
-      aroundApi.getEmail()
-        .then(setUserEmail)
-        .catch(logErrors);
-    }
+    aroundApi.checkIfUserIsLoggedIn()
+      .then(({ jwt }) => {
+        if(jwt) {
+          aroundApi.setToken(jwt);
+          setInitDataForLoggedInUser();
+        }
+      }).catch((logErrors));
   }, []);
 
 
@@ -194,7 +180,7 @@ function App() {
   function handleRegisterClick(email, password) { 
     setIsRegistering(true);
     aroundApi.signup(email, password)
-      .then((data) => {
+      .then(() => {
         setIsRegistrationSuccess(true);
         history.push('/signin');
       })
@@ -207,11 +193,9 @@ function App() {
   function handleLoginClick(email, password) {
     setIsLoggingIn(true);
     aroundApi.signin(email, password)
-      .then(() => {
-        setUserEmail(email);
-        setIsLoggedIn(true);
-        localStorage.setItem('isLoggedIn', 'true');
-        history.push('/');
+      .then(({ jwt }) => {
+        aroundApi.setToken(jwt);
+        setInitDataForLoggedInUser();
       })
       .catch((err) => {
         logErrors(err);
@@ -219,10 +203,11 @@ function App() {
   }
 
   function handleSignOut() {
-    setIsLoggedIn(false);
-    setUserEmail('');
-    localStorage.removeItem('isLoggedIn');
-    history.push('/signin');
+    aroundApi.signout()
+      .then(() => {
+        setCurrentUser(null);
+        history.push('/signin');
+      }).catch(logErrors);
   }
 
   function redirectWhenUserIsLoggedIn(Component, props) {
@@ -238,7 +223,7 @@ function App() {
       <div className="page">
         <Header 
           isUserLoggedIn={isLoggedIn} 
-          userEmail={userEmail}
+          userEmail={currentUser ? currentUser.email : ''}
           isUserOnLoginPage={isUserOnLoginPage}
           isUserOnRegistrationPage={isUserOnRegistrationPage}
           onSignOut={handleSignOut}
