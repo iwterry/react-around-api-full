@@ -61,7 +61,6 @@ class AroundApi extends Api {
   }
 
   getUserProfile() {
-    console.log(this.getToken())
     return this.fetchData({
       relativePathFromBase: 'users/me',
       headers: {
@@ -133,7 +132,6 @@ if(process.env.NODE_ENV === 'production') {
   baseUrl = 'https://api.practicum-iwterry.students.nomoreparties.site';
 }
 
-console.log(baseUrl);
 export default new AroundApi(
   baseUrl,
 );
