@@ -3,6 +3,7 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { errors, celebrate, Joi } = require('celebrate');
+require('dotenv').config();
 
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -15,9 +16,9 @@ const { logError, convertErrorToHttpError } = require('./helpers/helpers');
 const { errorLogger, requestLogger } = require('./middleware/logger');
 
 const app = express();
-const { PORT = 3000 } = process.env;
+const { PORT = 3001, DATABASE_NAME = 'aroundb' } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/aroundb', {
+mongoose.connect(`mongodb://localhost:27017/${DATABASE_NAME}`, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -88,7 +89,6 @@ app.get('/is-token-valid', authWithCookie);
 
 app.use('/users', authWithAuthorizationHeader, userRouter);
 app.use('/cards', authWithAuthorizationHeader, cardRouter);
-
 
 app.use(authWithAuthorizationHeader, (req, res, next) => {
   next(new NotFoundHttpError());

@@ -90,16 +90,17 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
+  const { SECRET_KEY = 'fd6fff9317435012847d32443f758c50bad13aeca2ddbdda92d88056ef5dc7df' } = process.env;
   const sevenDaysInMilliSeconds = 1000 * 60 * 60 * 24 * 7;
 
   User
     .findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        'fd6fff9317435012847d32443f758c50bad13aeca2ddbdda92d88056ef5dc7df',
-        { expiresIn: '7 days' },
-      );
+      const token = jwt.sign({
+        _id: user._id,
+      }, SECRET_KEY, {
+        expiresIn: '7 days',
+      });
 
       res
         .cookie('jwt', token, {
