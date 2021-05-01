@@ -44,7 +44,7 @@ module.exports.createCard = (req, res, next) => {
     .then((newCard) => User.findById(newCard.owner)
       .then((owner) => {
         /*
-        Note: I am disabling rule because there is no harm caused by modiying
+        Note: I am disabling rule because there is no harm caused by modifying
         the parameter 'newCard.' Also, copying the data using the spread operator
         created issues.
         */

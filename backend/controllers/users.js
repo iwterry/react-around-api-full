@@ -5,6 +5,7 @@ const User = require('../models/user');
 const { getUserInfoDisplayedToClient } = require('../helpers/helpers');
 const NotFoundHttpError = require('../errors/NotFoundHttpError');
 const BadRequestHttpError = require('../errors/BadRequestHttpError');
+const { SECRET_KEY_DEV } = require('../helpers/constants');
 
 const NOT_FOUND_ERROR_MSG = 'User ID not found';
 
@@ -68,9 +69,10 @@ module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
+  const SALT_LENGTH = 10;
 
   bcrypt
-    .hash(password, 10)
+    .hash(password, SALT_LENGTH)
     .then((hash) => User
       .create({
         name, about, avatar, email, password: hash,
@@ -90,7 +92,7 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-  const { SECRET_KEY = 'fd6fff9317435012847d32443f758c50bad13aeca2ddbdda92d88056ef5dc7df' } = process.env;
+  const { SECRET_KEY = SECRET_KEY_DEV } = process.env;
   const sevenDaysInMilliSeconds = 1000 * 60 * 60 * 24 * 7;
 
   User
@@ -102,6 +104,9 @@ module.exports.login = (req, res, next) => {
         expiresIn: '7 days',
       });
 
+      // Sending cookie as way to remember whether user is logged in.
+      // Sending JSON so that client can send the token in the header when making request.
+      // The token in the header is used to combat CSRF threat of SameSite=none cookies.
       res
         .cookie('jwt', token, {
           httpOnly: true,

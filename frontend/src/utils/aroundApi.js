@@ -2,7 +2,6 @@ import Api from './Api';
 
 class AroundApi extends Api {
   _token;
-  
 
   setToken(token) {
     this._token = token;
@@ -128,10 +127,10 @@ class AroundApi extends Api {
   }
 }
 
-let baseUrl ='https://api.practicum-iwterry.students.nomoreparties.site';
+let baseUrl ='http://localhost:3001';
 
-if(process.env.NODE_ENV === 'development') {
-  baseUrl = 'http://localhost:3001';
+if(process.env.NODE_ENV === 'production') {
+  baseUrl = 'https://api.practicum-iwterry.students.nomoreparties.site';
 }
 
 console.log(baseUrl);

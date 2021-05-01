@@ -33,7 +33,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use((req, res, next) => { // middleware deals with cross origin issues
+app.use((req, res, next) => { // middleware dealing with cross origin issues
   const { origin } = req.headers;
   const { method } = req;
 
@@ -51,7 +51,7 @@ app.use((req, res, next) => { // middleware deals with cross origin issues
     res.header('access-control-allow-headers', 'Content-Type, Authorization');
     res.header('access-control-allow-methods', 'GET, POST, PUT, PATCH, DELETE');
 
-    if (method === 'OPTIONS') res.send(); // deal with preflight used for CORS
+    if (method === 'OPTIONS') res.send(); // deals with preflight used for CORS
     else next(); // deals with actual request and not preflight
   } else next(); // deals with origins not allowed
 });
@@ -78,28 +78,32 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-// eslint-disable-next-line no-unused-vars
-app.get('/signout', authWithAuthorizationHeader, (req, res, next) => res.clearCookie('jwt', {
+// when user signs out, clear the cookie so that the backend
+// will not have the user logged in
+app.get('/signout', authWithAuthorizationHeader, (req, res) => res.clearCookie('jwt', {
   httpOnly: true,
   sameSite: 'none',
   secure: true,
 }).end());
 
+// check whether token (using cookie) is valid as way to know
+// if user is still signed in
 app.get('/is-token-valid', authWithCookie);
 
+// userRouter and cardRouter will be relative
 app.use('/users', authWithAuthorizationHeader, userRouter);
 app.use('/cards', authWithAuthorizationHeader, cardRouter);
 
-app.use(authWithAuthorizationHeader, (req, res, next) => {
-  next(new NotFoundHttpError());
+app.use(authWithAuthorizationHeader, () => {
+  throw new NotFoundHttpError();
 });
 
 app.use(errorLogger);
 
 app.use(errors());
 
-/* the parameter "next" will not be used, but is needed
-as this is error middleware and it requires four parameters */
+/* parameters "next" and "req" will not be used, but are needed
+as this is error middleware, and it requires four parameters */
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const httpError = convertErrorToHttpError(err);

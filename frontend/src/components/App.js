@@ -39,6 +39,7 @@ function App() {
   const [ isUserOnRegistrationPage, setIsUserOnRegistrationPage ] = React.useState(false);
   const [ isLoggingIn, setIsLoggingIn ] = React.useState(false);
   const [ isUserOnLoginPage, setIsUserOnLoginPage ] = React.useState(false);
+  const history = useHistory();
 
   const isOpen = (
     isEditAvatarPopupOpen || 
@@ -50,8 +51,6 @@ function App() {
     isError
   );
   const isLoggedIn = currentUser !== null;
-
-  const history = useHistory();
 
 
   function closeAllPopups() {
@@ -110,7 +109,8 @@ function App() {
     } else {
       document.removeEventListener('keydown', handleClosingAllPopupsUsingEscKey);
     }
-  }, [isOpen]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]); // only should run when isOpen changes
 
   React.useEffect(() => {
     aroundApi.checkIfUserIsLoggedIn()
@@ -120,7 +120,8 @@ function App() {
           setInitDataForLoggedInUser();
         }
       }).catch(handleError);
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // only should run once and that is when app mounts
 
 
   function handleCardLike(clickedCardId, isClickedCardLikedAlreadyByUser) {
@@ -334,6 +335,10 @@ function App() {
           isOpen={isRegistrationSuccess}
           onClose={closeAllPopups}
         />
+        {/* 
+          Changed the error InfoTooltip from just showing up when registration error 
+          occurs to displaying more errors from the app in order to provide better usability.
+      */}
         <InfoTooltip 
           iconType="error" 
           description={errText}

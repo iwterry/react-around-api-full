@@ -1,4 +1,4 @@
-class Api {
+class Api { // trying to keep this class as generic as possible for reusability
   constructor(baseUrl, { headers={}, ...others }={}) {
     this._baseUrl = baseUrl;
     this._headers = headers;

@@ -10,8 +10,7 @@ module.exports.authWithAuthorizationHeader = (req, res, next) => {
   next();
 };
 
-// eslint-disable-next-line no-unused-vars
-module.exports.authWithCookie = (req, res, _) => {
+module.exports.authWithCookie = (req, res) => {
   const token = getTokenFromCookie(req);
 
   try {
@@ -20,11 +19,13 @@ module.exports.authWithCookie = (req, res, _) => {
     if (err.httpStatusCode !== 401) {
       throw err;
     }
-
+    // user not signed in
     res.send({ jwt: null });
 
     return;
   }
 
+  // user still signed in.
+  // give the token from cookie (which is httpOnly, so frontend JS cannot touch)
   res.json({ jwt: token });
 };

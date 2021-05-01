@@ -9,6 +9,7 @@ const {
 } = require('../controllers/cards');
 
 cardRouter.get('/', getCards);
+
 cardRouter.post('/', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
@@ -16,7 +17,7 @@ cardRouter.post('/', celebrate({
   }),
 }), createCard);
 
-cardRouter.use('/:id', celebrate({ /* routes below this will use this middleware */
+cardRouter.use('/:id', celebrate({ /* the routes below this will use this middleware */
   params: Joi.object().keys({
     id: Joi.string().required().length(24),
   }),
