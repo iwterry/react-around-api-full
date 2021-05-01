@@ -60,7 +60,6 @@ function App() {
     setIdOfCardToBeDeleted(null);
     setSelectedCard({ ...selectedCard, _id: null });
     setIsError(false);
-    setErrText('');
     setIsRegistrationSuccess(false);
   }
 
