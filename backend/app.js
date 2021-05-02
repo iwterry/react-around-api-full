@@ -54,26 +54,26 @@ app.post('/signin', validateSignIn, login);
 app.post('/signup', validateSignUp, createUser);
 /*
   Check whether token (using cookie) is valid as way to know
-  if user is still signed in. No validation hea
+  if user is still signed in.
 */
 app.get('/is-token-valid', validateAuthCookieHeader(), authWithCookie);
 
-// NOTE: ###### all routes below this will require authentication #######
+// NOTE: ########## All routes below this will require authentication ##########
 app.use(validateAuthHeader(), authWithAuthorizationHeader);
 /*
   When user signs out, clear the cookie so that the backend
-  will not have the user logged in. No validation for this route.
+  will not have the user logged in.
 */
-app.get('/signout', (req, res) => res.clearCookie('jwt', {
+app.get('/signout', (req, res) => res.clearCookie('jwt', { // check for authentication happens above
   httpOnly: true,
   sameSite: 'none',
   secure: true,
 }).end());
 
 // userRouter and cardRouter will be relative
-app.use('/users', userRouter);
-app.use('/cards', cardRouter);
-app.use(() => {
+app.use('/users', userRouter); // check for authentication happens above
+app.use('/cards', cardRouter); // check for authentication happens above
+app.use(() => { // check for authentication happens above
   throw new NotFoundHttpError();
 });
 
