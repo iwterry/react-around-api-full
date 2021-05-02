@@ -12,6 +12,7 @@ cardRouter.get('/', getCards);
 cardRouter.post('/', validateCardCreation(), createCard);
 cardRouter.delete('/:id', validateIdRouteParam(), deleteCard);
 cardRouter.put('/:id/likes', validateIdRouteParam(), likeCard);
+// A user cannot delete a card if its not the owner of it. An error with status code 403 occur.
 cardRouter.delete('/:id/likes', validateIdRouteParam(), unlikeCard);
 
 module.exports = cardRouter;
