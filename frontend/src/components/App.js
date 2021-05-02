@@ -208,8 +208,10 @@ function App() {
         setIsRegistrationSuccess(true);
         history.push('/signin');
       })
-      .catch(handleError)
-      .finally(() => setIsRegistering(false));
+      .catch((httpStatusCode) => {
+        if(httpStatusCode === 409) handleError(httpStatusCode, 'Must choose a different email address');
+        else handleError(httpStatusCode);
+      }).finally(() => setIsRegistering(false));
   }
 
   function handleLoginClick(email, password) {
