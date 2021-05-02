@@ -66,6 +66,7 @@ module.exports.deleteCard = (req, res, next) => {
       }
 
       if (String(card.owner) !== req.user._id) {
+        // NOTE: this error is a 403 error
         throw new NoRightToAccessHttpError('Do not have permission to delete this card');
       }
 
