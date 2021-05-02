@@ -53,22 +53,20 @@ app.post('/signup', validateSignUp(), createUser);
 */
 app.get('/is-token-valid', authWithCookie); // No validation for this route
 
-// NOTE: ########## All routes below this will require authentication ##########
-app.use(authWithAuthorizationHeader);
 /*
   When user signs out, clear the cookie so that the backend
   will not have the user logged in.
 */
-app.get('/signout', (req, res) => res.clearCookie('jwt', { // check for authentication happens above
+app.get('/signout', authWithAuthorizationHeader, (req, res) => res.clearCookie('jwt', {
   httpOnly: true,
   sameSite: 'none',
   secure: true,
 }).end());
 
 // userRouter and cardRouter will be relative
-app.use('/users', userRouter); // check for authentication happens above
-app.use('/cards', cardRouter); // check for authentication happens above
-app.use(() => { // check for authentication happens above
+app.use('/users', authWithAuthorizationHeader, userRouter);
+app.use('/cards', authWithAuthorizationHeader, cardRouter);
+app.use(authWithAuthorizationHeader, () => {
   throw new NotFoundHttpError();
 });
 
