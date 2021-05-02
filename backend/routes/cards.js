@@ -1,5 +1,4 @@
 const cardRouter = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
 const {
   createCard,
   getCards,
@@ -7,24 +6,12 @@ const {
   likeCard,
   unlikeCard,
 } = require('../controllers/cards');
+const { validateIdRouteParam, validateCardCreation } = require('../middleware/validation');
 
 cardRouter.get('/', getCards);
-
-cardRouter.post('/', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().uri({ scheme: ['http', 'https'] }),
-  }),
-}), createCard);
-
-cardRouter.use('/:id', celebrate({ /* the routes below this will use this middleware */
-  params: Joi.object().keys({
-    id: Joi.string().required().hex().length(24),
-  }),
-}));
-
-cardRouter.delete('/:id', deleteCard);
-cardRouter.put('/:id/likes', likeCard);
-cardRouter.delete('/:id/likes', unlikeCard);
+cardRouter.post('/', validateCardCreation(), createCard);
+cardRouter.delete('/:id', validateIdRouteParam(), deleteCard);
+cardRouter.put('/:id/likes', validateIdRouteParam(), likeCard);
+cardRouter.delete('/:id/likes', validateIdRouteParam(), unlikeCard);
 
 module.exports = cardRouter;
