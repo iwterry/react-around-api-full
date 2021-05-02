@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { getUserInfoDisplayedToClient } = require('../helpers/helpers');
 const NotFoundHttpError = require('../errors/NotFoundHttpError');
-const BadRequestHttpError = require('../errors/BadRequestHttpError');
+const HttpError = require('../errors/HttpError');
 const { SECRET_KEY_DEV } = require('../helpers/constants');
 
 const NOT_FOUND_ERROR_MSG = 'User ID not found';
@@ -80,7 +80,7 @@ module.exports.createUser = (req, res, next) => {
       .catch((err) => {
         // assumption: detection for when duplicate email occurs
         if (err.name === 'MongoError' && err.code === 11000) {
-          throw new BadRequestHttpError();
+          throw new HttpError('Conflict', 409, 'Must signup with a different email address');
         }
         throw err;
       }))
