@@ -19,7 +19,7 @@ cardRouter.post('/', celebrate({
 
 cardRouter.use('/:id', celebrate({ /* the routes below this will use this middleware */
   params: Joi.object().keys({
-    id: Joi.string().required().length(24),
+    id: Joi.string().required().hex().length(24),
   }),
 }));
 
