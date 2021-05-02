@@ -8,18 +8,6 @@ module.exports.validateIdRouteParam = (paramName = 'id') => celebrate({
   }),
 });
 
-module.exports.validateAuthHeader = () => celebrate({
-  headers: Joi.object().keys({
-    authorization: Joi.string().required().pattern(/^Bearer /),
-  }).unknown(true),
-});
-
-module.exports.validateAuthCookieHeader = () => celebrate({
-  cookies: Joi.object().keys({
-    jwt: Joi.string().required(),
-  }).unknown(true),
-});
-
 module.exports.validateUserProfileUpdate = () => celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),

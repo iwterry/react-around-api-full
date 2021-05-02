@@ -15,12 +15,7 @@ const { logError } = require('./helpers/helpers');
 
 const { authWithAuthorizationHeader, authWithCookie } = require('./middleware/auth');
 const { errorLogger, requestLogger } = require('./middleware/logger');
-const {
-  validateSignUp,
-  validateSignIn,
-  validateAuthHeader,
-  validateAuthCookieHeader,
-} = require('./middleware/validation');
+const { validateSignUp, validateSignIn } = require('./middleware/validation');
 const centralErrorMiddleware = require('./middleware/error');
 const corsMiddleWare = require('./middleware/cors');
 
@@ -56,10 +51,10 @@ app.post('/signup', validateSignUp, createUser);
   Check whether token (using cookie) is valid as way to know
   if user is still signed in.
 */
-app.get('/is-token-valid', validateAuthCookieHeader(), authWithCookie);
+app.get('/is-token-valid', authWithCookie); // No validation for this route
 
 // NOTE: ########## All routes below this will require authentication ##########
-app.use(validateAuthHeader(), authWithAuthorizationHeader);
+app.use(authWithAuthorizationHeader);
 /*
   When user signs out, clear the cookie so that the backend
   will not have the user logged in.
