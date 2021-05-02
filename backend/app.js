@@ -45,8 +45,8 @@ app.get('/crash-test', () => { // no vaidation for this route
   }, 0);
 });
 
-app.post('/signin', validateSignIn, login);
-app.post('/signup', validateSignUp, createUser);
+app.post('/signin', validateSignIn(), login);
+app.post('/signup', validateSignUp(), createUser);
 /*
   Check whether token (using cookie) is valid as way to know
   if user is still signed in.
