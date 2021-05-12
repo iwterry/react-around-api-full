@@ -9,6 +9,7 @@ This repository contains the full API of "Around the U.S." project that features
   * Frontend: https://practicum-iwterry.students.nomoreparties.site
   * Backend: https://api.practicum-iwterry.students.nomoreparties.site
   * Used Microsoft Azure for hosting.
+  * UPDATE: The URLs and the IP address given for the frontend and backend are no longer valid, as I have turned off the virtual machine from Azure that was being used. So the links willl not work.
 
 About this fullstack app:
 * Whenever the frontend app mounts, it will send a request to the backend to see if the user is signed in. A user is considered signed in if the backend receives a valid JWT (JSON Web Token) from a cookie. When the frontend makes this request to the backend, a cookie will be sent if there is one.
